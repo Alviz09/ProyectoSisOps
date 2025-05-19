@@ -9,28 +9,34 @@ void enviar_operacion(int pipe_fd, char operacion, const char* titulo, int ISBN)
     Mensaje msg;
     Respuesta resp;
 
+    printf("[DEBUG] Preparando mensaje para enviar...\n");
+    
     msg.operacion = operacion;
     strncpy(msg.titulo, titulo, 100);
     msg.titulo[99] = '\0';  // Asegurar null-termination
     msg.ISBN = ISBN;
     msg.pid = getpid();     // Añadir PID para que el servidor sepa a quién responder
 
-    printf("Enviando solicitud: %c, %s, %d\n", operacion, titulo, ISBN);
+    printf("[DEBUG] PID del proceso: %d\n", msg.pid);
+    printf("[DEBUG] Enviando solicitud: %c, '%s', ISBN=%d\n", operacion, titulo, ISBN);
     
     if (!enviar_solicitud(pipe_fd, &msg)) {
-        fprintf(stderr, "Error al enviar solicitud\n");
+        fprintf(stderr, "[ERROR] Error al enviar solicitud por pipe %d\n", pipe_fd);
         return;
     }
+    printf("[DEBUG] Solicitud enviada correctamente\n");
 
+    printf("[DEBUG] Esperando respuesta del servidor...\n");
     if (!recibir_respuesta(pipe_fd, &resp)) {
-        fprintf(stderr, "Error al recibir respuesta\n");
+        fprintf(stderr, "[ERROR] Error al recibir respuesta por pipe %d\n", pipe_fd);
         return;
     }
+    printf("[DEBUG] Respuesta recibida correctamente\n");
 
     if (resp.exito) {
-        printf("Operación exitosa: %s\n", resp.mensaje);
+        printf("[INFO] Operación exitosa: %s\n", resp.mensaje);
     } else {
-        printf("Operación fallida: %s\n", resp.mensaje);
+        printf("[INFO] Operación fallida: %s\n", resp.mensaje);
     }
 }
 

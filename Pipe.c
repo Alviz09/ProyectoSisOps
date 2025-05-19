@@ -5,7 +5,7 @@
 // Funciones del PS (cliente)
 int conectar_a_pipe_receptor(const char *nombre_pipe) {
     // Abre el pipe en modo de escritura
-    int fd = open(nombre_pipe, O_WRONLY);
+    int fd = open(nombre_pipe, O_RDWR);
     if (fd == -1) {
         perror("Error al conectar al pipe receptor");
     }
@@ -36,7 +36,7 @@ int crear_pipe_receptor(const char *nombre_pipe) {
     }
     
     // Abrimos el pipe en modo lectura 
-    int fd = open(nombre_pipe, O_RDONLY );
+    int fd = open(nombre_pipe, O_RDWR );
     if (fd == -1) {
         perror("Error al abrir el pipe receptor");
     }

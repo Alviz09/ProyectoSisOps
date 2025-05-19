@@ -20,6 +20,7 @@ typedef struct {
     char operacion;        // 'D' (Devolver), 'R' (Renovar), 'P' (Préstamo), 'Q' (Quit/Salir)
     char titulo[100];      // Título del libro
     int ISBN;              // ISBN del libro
+    int pid;
 } Mensaje;
 
 // Estructura para respuestas
